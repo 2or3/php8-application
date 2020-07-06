@@ -1,0 +1,21 @@
+version: 0.2
+env:
+    variables:
+        IMAGE_NAME: '2or3/collarks'
+phases:
+    install:
+        runtime-versions:
+            docker: 18
+    pre_build:
+        commands:
+            - $(aws ecr get-login --no-include-email --region ${AWS_DEFAULT_REGION})
+            - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+            - URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_NAME}
+    build:
+        commands:
+            - docker build -t $URI:$CODEBUILD_RESOLVED_SOURCE_VERSION docker/php/.
+            - docker push $URI:$CODEBUILD_RESOLVED_SOURCE_VERSION
+            - printf '{"Version":"1.0","ImageURI":"%s"}' $URI:$CODEBUILD_RESOLVED_SOURCE_VERSION > imageDetail.json
+artifacts:
+    files: imageDetail.json
+

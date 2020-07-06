@@ -21,3 +21,9 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+
+# terrafirn
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/.terraform
+
