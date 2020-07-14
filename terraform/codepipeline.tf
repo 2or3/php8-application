@@ -11,6 +11,7 @@ data "aws_iam_policy_document" "codepipeline_assumerole" {
     }
   }
 }
+
 resource "aws_iam_role" "codepipeline" {
   name               = "ecs-pipeline-project"
   assume_role_policy = data.aws_iam_policy_document.codepipeline_assumerole.json
@@ -29,8 +30,7 @@ resource "aws_iam_role_policy_attachment" "codepipeline" {
   policy_arn = aws_iam_policy.codepipeline.arn
 }
 
-
-resource "aws_codepipeline" "main" {
+resource "aws_codepipeline" "collarks_codepipeline" {
   name     = "collarks-ecs-pipeline"
   role_arn = aws_iam_role.codepipeline.arn
 
@@ -69,7 +69,30 @@ resource "aws_codepipeline" "main" {
       input_artifacts  = ["source"]
       output_artifacts = ["build"]
       configuration = {
-        ProjectName = "ecs-pipeline"
+        ProjectName = "collarks-ecs-pipeline"
+      }
+    }
+  }
+
+  stage {
+    name = "Deploy"
+    action {
+      name            = "Deploy"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "CodeDeployToECS"
+      version         = "1"
+      run_order       = 3
+      input_artifacts = ["build", "source"]
+      configuration = {
+        ApplicationName                = aws_codedeploy_app.collarks_deploy.name
+        DeploymentGroupName            = aws_codedeploy_app.collarks_deploy.name
+        TaskDefinitionTemplateArtifact = "source"
+        TaskDefinitionTemplatePath     = "task_definition.json"
+        AppSpecTemplateArtifact        = "source"
+        AppSpecTemplatePath            = "appspec.yaml"
+        Image1ArtifactName             = "build"
+        Image1ContainerName            = "IMAGE1_NAME"
       }
     }
   }

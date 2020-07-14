@@ -52,12 +52,12 @@ data "aws_iam_policy_document" "codebuild" {
 }
 
 resource "aws_iam_role" "codebuild" {
-  name               = "ecs-pipeline-codebuild"
+  name               = "ecs-codebuild-project"
   assume_role_policy = data.aws_iam_policy_document.codebuild_assumerole.json
 }
 
 resource "aws_iam_role_policy" "codebuild" {
-  name   = "ecs-pipeline-codebuild"
+  name   = "ecs-codebuild-project"
   role   = aws_iam_role.codebuild.id
   policy = data.aws_iam_policy_document.codebuild.json
 }

@@ -1,0 +1,32 @@
+{
+    "cluster": "collarks-cluster",
+    "serviceName": "collarks",
+    "taskDefinition": "collarks",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:ap-northeast-1:044462970062:targetgroup/collarks-green/478ede6b2eb436b0",
+            "containerName": "collarks",
+            "containerPort": 80
+        }
+    ],
+    "desiredCount": 1,
+    "capacityProviderStrategy": [
+        {
+            "capacityProvider": "FARGATE_SPOT",
+            "weight": 1,
+            "base": 1
+        }
+    ],
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": ["subnet-0355b9e71f45b4590", "subnet-0702ea08f0ff1fbcb"],
+            "securityGroups": ["sg-054d6c637ef47a601"],
+            "assignPublicIp": "ENABLED"
+        }
+    },
+    "healthCheckGracePeriodSeconds": 0,
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "enableECSManagedTags": true
+}
