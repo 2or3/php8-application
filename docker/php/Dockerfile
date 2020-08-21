@@ -5,5 +5,5 @@ MAINTAINER Tsukasa Nagashima
 COPY ./src/ /php/src/
 WORKDIR /php/src/
 
-ENTRYPOINT php artisan serve
+ENTRYPOINT php artisan serve --port=80
 
