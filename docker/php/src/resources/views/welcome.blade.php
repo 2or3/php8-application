@@ -78,7 +78,7 @@
                     @endauth
                 </div>
             @endif
-test1
+
             <div class="content">
                 <div class="title m-b-md">
                     Laravel
