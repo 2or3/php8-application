@@ -2,6 +2,8 @@
 FROM php:8.0-rc-fpm
 MAINTAINER Tsukasa Nagashima
 
+EXPOSE 80
+
 COPY ./src/ /php/src/
 WORKDIR /php/src/
 
